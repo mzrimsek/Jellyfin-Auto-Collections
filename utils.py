@@ -51,7 +51,7 @@ def request_repeat_post(url, headers=None, params=None):
             pass
 
 # https://stackoverflow.com/a/65407083
-def get_variable(name: str, default_value: bool | None = None) -> bool:
+def get_env_variable(name: str, default_value: bool | None = None) -> bool:
     true_ = ('true', '1', 't')  # Add more entries if you want, like: `y`, `yes`, `on`, ...
     false_ = ('false', '0', 'f')  # Add more entries if you want, like: `n`, `no`, `off`, ...
     value: str | None = os.getenv(name, None)
@@ -71,10 +71,30 @@ def load_env_config():
     load_dotenv()
     
     config_dict = {}
-    config_dict["server_url"] = get_variable("JELLYFIN_SERVER_URL")
-    config_dict["api_key"] = get_variable("JELLYFIN_API_KEY")
-    config_dict["user_id"] = get_variable("JELLYFIN_USER_ID")
-    config_dict["movies_dir"] = get_variable("JELLYFIN_MOVIES_PATH")
-    config_dict["disable_tv_year_filter"] = get_variable("DISABLE_TV_YEAR_CHECK", default_value=False)
+    config_dict["server_url"] = get_env_variable("JELLYFIN_SERVER_URL")
+    config_dict["api_key"] = get_env_variable("JELLYFIN_API_KEY")
+    config_dict["user_id"] = get_env_variable("JELLYFIN_USER_ID")
+    config_dict["movies_dir"] = get_env_variable("JELLYFIN_MOVIES_PATH")
+    config_dict["disable_tv_year_filter"] = get_env_variable("DISABLE_TV_YEAR_CHECK", default_value=False)
     
     return config_dict
+
+def get_yaml_variable_list(name: str, config) -> list:
+    '''Get a list from a yaml config file, return empty list if not found'''
+    try:
+        return config[name]
+    except KeyError:
+        return []
+
+def load_yaml_config():
+    '''Load config from config.yaml'''
+    import yaml
+    with open("config.yaml", "r") as f:
+        config = yaml.safe_load(f)
+    
+    config_dict = {}
+    config_dict["imdb_list_ids"] = get_yaml_variable_list("imdb_list_ids", config)
+    config_dict["imdb_chart_ids"] = get_yaml_variable_list("imdb_chart_ids", config)
+    config_dict["letterboxd_list_ids"] = get_yaml_variable_list("letterboxd_list_ids", config)
+    
+    return config

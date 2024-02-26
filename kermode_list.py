@@ -3,10 +3,10 @@ import requests
 
 from utils import load_env_config, find_collection_with_name_or_create, get_all_collections
 
-config = load_env_config()
-server_url = config["server_url"]
-api_key= config["api_key"]
-user_id = config["user_id"]
+env_config = load_env_config()
+server_url = env_config["server_url"]
+api_key= env_config["api_key"]
+user_id = env_config["user_id"]
 
 headers = {'X-Emby-Token': api_key}
 

@@ -9,11 +9,11 @@ import json
 import re
 import requests
 
-config = load_env_config()
-server_url = config["server_url"]
-api_key= config["api_key"]
-user_id = config["user_id"]
-movies_dir = config["movies_dir"]
+env_config = load_env_config()
+server_url = env_config["server_url"]
+api_key= env_config["api_key"]
+user_id = env_config["user_id"]
+movies_dir = env_config["movies_dir"]
 
 headers = {'X-Emby-Token': api_key}
 

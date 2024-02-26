@@ -4,15 +4,16 @@ import html
 import json
 import csv
 
-from utils import load_env_config, request_repeat_get, request_repeat_post, find_collection_with_name_or_create, get_all_collections
+from utils import load_env_config, load_yaml_config, request_repeat_get, request_repeat_post, find_collection_with_name_or_create, get_all_collections
 
-config = load_env_config()
-server_url = config["server_url"]
-api_key= config["api_key"]
-user_id = config["user_id"]
-disable_tv_year_filter = config["disable_tv_year_filter"]
+env_config = load_env_config()
+server_url = env_config["server_url"]
+api_key= env_config["api_key"]
+user_id = env_config["user_id"]
+disable_tv_year_filter = env_config["disable_tv_year_filter"]
 
-imdb_list_ids = json.loads(config["main"]["imdb_list_ids"])
+yaml_config = load_yaml_config()
+imdb_list_ids = yaml_config["imdb_list_ids"]
 
 headers = {'X-Emby-Token': api_key}
 
