@@ -14,7 +14,6 @@ user_id = config["main"]["user_id"]
 headers = {'X-Emby-Token': config["main"]["jellyfin_api_key"]}
 collection_name = "TSPDT Top 1000 Greatest"
 
-
 # Find list of all collections
 collections = get_all_collections(headers=headers)
 collection_id = find_collection_with_name_or_create(collection_name, collections, headers=headers)

@@ -7,7 +7,6 @@ config.read('config.ini')
 server_url = config["main"]["server_url"]
 user_id = config["main"]["user_id"]
 
-
 def get_all_collections(headers=None):
     '''Find list of all collections'''
     params = {
@@ -39,8 +38,6 @@ def find_collection_with_name_or_create(list_name, collections, headers=None):
         collection_id = res2.json()["Id"]
     return collection_id
 
-
-
 def get_library_id(library_name, headers=None):
     '''Get the library named library_name'''
     r = requests.get(f'{server_url}/Users/{user_id}/Views',headers=headers)
@@ -52,7 +49,6 @@ def get_library_id(library_name, headers=None):
         library_id = library_id[0]
     return library_id
 
-
 def request_repeat_get(url, headers=None, params=None):
     '''Do a GET request, repeat if err'''
     while True:
@@ -61,7 +57,6 @@ def request_repeat_get(url, headers=None, params=None):
             return res
         except:
             pass
-
 
 def request_repeat_post(url, headers=None, params=None):
     '''Do a POST request, repeat if err'''
