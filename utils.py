@@ -52,6 +52,8 @@ def request_repeat_post(url, headers=None, params=None):
 
 # https://stackoverflow.com/a/65407083
 def get_env_variable(name: str, default_value: bool | None = None) -> bool:
+    import os
+    
     true_ = ('true', '1', 't')  # Add more entries if you want, like: `y`, `yes`, `on`, ...
     false_ = ('false', '0', 'f')  # Add more entries if you want, like: `n`, `no`, `off`, ...
     value: str | None = os.getenv(name, None)
@@ -66,7 +68,6 @@ def get_env_variable(name: str, default_value: bool | None = None) -> bool:
 
 def load_env_config():
     '''Load environment variables from .env file'''
-    import os
     from dotenv import load_dotenv
     load_dotenv()
     
@@ -74,7 +75,7 @@ def load_env_config():
     config_dict["server_url"] = get_env_variable("JELLYFIN_SERVER_URL")
     config_dict["api_key"] = get_env_variable("JELLYFIN_API_KEY")
     config_dict["user_id"] = get_env_variable("JELLYFIN_USER_ID")
-    config_dict["movies_dir"] = get_env_variable("JELLYFIN_MOVIES_PATH")
+    config_dict["movies_dir"] = get_env_variable("JELLYFIN_MOVIES_DIR")
     config_dict["disable_tv_year_filter"] = get_env_variable("DISABLE_TV_YEAR_CHECK", default_value=False)
     
     return config_dict
@@ -89,7 +90,12 @@ def get_yaml_variable_list(name: str, config) -> list:
 def load_yaml_config():
     '''Load config from config.yaml'''
     import yaml
-    with open("config.yaml", "r") as f:
+    
+    running_in_docker = get_env_variable("RUNNING_IN_DOCKER", default_value=False)
+    config_dir = get_env_variable("DOCKER_CONFIG_DIR") if running_in_docker else ""
+    config_path = f"{config_dir}config.yaml"
+    
+    with open(config_path, "r") as f:
         config = yaml.safe_load(f)
     
     config_dict = {}
