@@ -2,14 +2,14 @@ import json
 import requests
 from lxml import html
 
-from utils import load_env_config, find_collection_with_name_or_create, get_all_collections
+from utils import load_app_config, find_collection_with_name_or_create, get_all_collections
 
 def update_top_1000_movies_collection():
 '''Gets top 1000 movies from the TSPDT masterlist'''
-    config = load_env_config()
-    server_url = config["server_url"]
-    api_key= config["api_key"]
-    user_id = config["user_id"]
+    app_config = load_app_config()
+    server_url = app_config["server_url"]
+    api_key= app_config["api_key"]
+    user_id = app_config["user_id"]
 
     headers = {'X-Emby-Token': api_key}
 

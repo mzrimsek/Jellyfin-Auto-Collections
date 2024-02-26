@@ -3,18 +3,16 @@ import html
 import json
 import csv
 
-from utils import load_env_config, load_yaml_config, request_repeat_get, request_repeat_post, find_collection_with_name_or_create, get_all_collections
+from utils import load_app_config, request_repeat_get, request_repeat_post, find_collection_with_name_or_create, get_all_collections
 
 def update_imdb_list_collections():
 '''Make collections from IMDB lists'''
-    env_config = load_env_config()
-    server_url = env_config["server_url"]
-    api_key= env_config["api_key"]
-    user_id = env_config["user_id"]
-    disable_tv_year_filter = env_config["disable_tv_year_filter"]
-
-    yaml_config = load_yaml_config()
-    imdb_list_ids = yaml_config["imdb_list_ids"]
+    app_config = load_app_config()
+    server_url = app_config["server_url"]
+    api_key= app_config["api_key"]
+    user_id = app_config["user_id"]
+    disable_tv_year_filter = app_config["disable_tv_year_filter"]
+    imdb_list_ids = app_config["imdb_list_ids"]
 
     headers = {'X-Emby-Token': api_key}
 

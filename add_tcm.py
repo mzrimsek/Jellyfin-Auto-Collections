@@ -8,15 +8,15 @@ import json
 import re
 import requests
 
-from utils import load_env_config, find_movie
+from utils import load_app_config, find_movie
 
 def update_turner_classic_movies_extras():
 '''Downloads Turner classic movies intros and outros'''
-    env_config = load_env_config()
-    server_url = env_config["server_url"]
-    api_key= env_config["api_key"]
-    user_id = env_config["user_id"]
-    movies_dir = env_config["movies_dir"]
+    app_config = load_app_config()
+    server_url = app_config["server_url"]
+    api_key= app_config["api_key"]
+    user_id = app_config["user_id"]
+    movies_dir = app_config["movies_dir"]
 
     headers = {'X-Emby-Token': api_key}
 

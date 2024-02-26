@@ -96,7 +96,20 @@ def load_env_config():
     config_dict["api_key"] = get_env_variable("JELLYFIN_API_KEY")
     config_dict["user_id"] = get_env_variable("JELLYFIN_USER_ID")
     config_dict["movies_dir"] = get_env_variable("JELLYFIN_MOVIES_DIR")
+    
     config_dict["disable_tv_year_filter"] = get_env_variable("DISABLE_TV_YEAR_CHECK", default_value=False)
+    
+    config_dict["do_kermode_intros"] = get_env_variable("DO_KERMODE_INTROS", default_value=False)
+    config_dict["do_kermode_lists"] = get_env_variable("DO_KERMODE_LIST", default_value=False)
+    config_dict["do_turner_classic_movie_extras"] = get_env_variable("DO_TURNER_CLASSIC_MOVIE_EXTRAS", default_value=False)
+    config_dict["do_top_1000_movies_list"] = get_env_variable("DO_TOP_1000_MOVIES_LIST", default_value=False)
+    config_dict["do_imdb_charts"] = get_env_variable("DO_IMDB_CHARTS", default_value=False)
+    config_dict["do_imdb_lists"] = get_env_variable("DO_IMDB_LISTS", default_value=False)
+    config_dict["do_letterboxd_lists"] = get_env_variable("DO_LETTERBOXD_LISTS", default_value=False)
+    
+    running_in_docker = get_env_variable("RUNNING_IN_DOCKER", default_value=False)
+    config_dict["running_in_docker"] = running_in_docker
+    config_dict["docker_config_dir"] = get_env_variable("DOCKER_CONFIG_DIR") if running_in_docker else ""
     
     return config_dict
 
@@ -107,12 +120,12 @@ def get_yaml_variable_list(name: str, config) -> list:
     except KeyError:
         return []
 
-def load_yaml_config():
+def load_yaml_config(env_config: dict):
     '''Load config from config.yaml'''
     import yaml
     
-    running_in_docker = get_env_variable("RUNNING_IN_DOCKER", default_value=False)
-    config_dir = get_env_variable("DOCKER_CONFIG_DIR") if running_in_docker else ""
+    running_in_docker = env_config["running_in_docker"]
+    config_dir = env_config["docker_config_dir"] if running_in_docker else ""
     config_path = f"{config_dir}config.yaml"
     
     with open(config_path, "r") as f:
@@ -124,3 +137,12 @@ def load_yaml_config():
     config_dict["letterboxd_list_ids"] = get_yaml_variable_list("letterboxd_list_ids", config)
     
     return config
+
+def load_app_config():
+    '''Load environment and yaml config'''
+    env_config = load_env_config()
+    yaml_config = load_yaml_config(env_config)
+    
+    app_config = {**env_config, **yaml_config}
+    
+    return app_config

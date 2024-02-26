@@ -3,17 +3,15 @@ import html
 import json
 import html
 
-from utils import load_env_config, load_yaml_config, request_repeat_get, request_repeat_post, find_collection_with_name_or_create, get_all_collections
+from utils import load_app_config, request_repeat_get, request_repeat_post, find_collection_with_name_or_create, get_all_collections
 
 def update_letterboxd_list_collections():
 '''Make collections from Letterboxd lists'''
-    env_config = load_env_config()
-    server_url = env_config["server_url"]
-    api_key= env_config["api_key"]
-    user_id = env_config["user_id"]
-
-    yaml_config = load_yaml_config()
-    letterboxd_list_ids = yaml_config["letterboxd_list_ids"]
+    app_config = load_app_config()
+    server_url = app_config["server_url"]
+    api_key= app_config["api_key"]
+    user_id = app_config["user_id"]
+    letterboxd_list_ids = app_config["letterboxd_list_ids"]
 
     headers = {'X-Emby-Token': api_key}
 
