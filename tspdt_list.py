@@ -2,18 +2,16 @@
 import json
 import requests
 from lxml import html
-from dotenv import load_dotenv
 
-from utils import find_collection_with_name_or_create, get_all_collections
+from utils import load_env_config, find_collection_with_name_or_create, get_all_collections
 
-load_dotenv()
+config = load_env_config()
+server_url = config["server_url"]
+api_key= config["api_key"]
+user_id = config["user_id"]
 
-# Load Config
-config = configparser.ConfigParser()
-config.read('config.ini')
-server_url = config["main"]["server_url"]
-user_id = config["main"]["user_id"]
-headers = {'X-Emby-Token': config["main"]["jellyfin_api_key"]}
+headers = {'X-Emby-Token': api_key}
+
 collection_name = "TSPDT Top 1000 Greatest"
 
 # Find list of all collections

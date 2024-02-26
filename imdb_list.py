@@ -3,19 +3,18 @@ import requests
 import html
 import json
 import csv
-from dotenv import load_dotenv
 
-from utils import request_repeat_get, request_repeat_post, find_collection_with_name_or_create, get_all_collections
+from utils import load_env_config, request_repeat_get, request_repeat_post, find_collection_with_name_or_create, get_all_collections
 
-load_dotenv()
+config = load_env_config()
+server_url = config["server_url"]
+api_key= config["api_key"]
+user_id = config["user_id"]
+disable_tv_year_filter = config["disable_tv_year_filter"]
 
-# Load Config
-config = configparser.ConfigParser()
-config.read('config.ini')
-server_url = config["main"]["server_url"]
-user_id = config["main"]["user_id"]
 imdb_list_ids = json.loads(config["main"]["imdb_list_ids"])
-headers = {'X-Emby-Token': config["main"]["jellyfin_api_key"]}
+
+headers = {'X-Emby-Token': api_key}
 
 params = {
     "enableTotalRecordCount": "false",
@@ -57,7 +56,7 @@ for imdb_list_id in imdb_list_ids:
         if item["Title Type"] == "tvEpisode" and ": " in item["Title"]:
             params2["searchTerm"] = item["Title"].split(": ", 1)[1]
 
-        if config.getboolean("main", "disable_tv_year_filter", fallback=False) and item["Title Type"] in ["tvSeries", "tvMiniSeries"]:
+        if disable_tv_year_filter and item["Title Type"] in ["tvSeries", "tvMiniSeries"]:
             del params2["years"]
 
         params2["includeItemTypes"] = imdb_to_jellyfin_type_map[item["Title Type"]]

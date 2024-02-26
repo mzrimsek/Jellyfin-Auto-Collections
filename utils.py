@@ -49,3 +49,32 @@ def request_repeat_post(url, headers=None, params=None):
             return res
         except:
             pass
+
+# https://stackoverflow.com/a/65407083
+def get_variable(name: str, default_value: bool | None = None) -> bool:
+    true_ = ('true', '1', 't')  # Add more entries if you want, like: `y`, `yes`, `on`, ...
+    false_ = ('false', '0', 'f')  # Add more entries if you want, like: `n`, `no`, `off`, ...
+    value: str | None = os.getenv(name, None)
+    if value is None:
+        if default_value is None:
+            raise ValueError(f'Variable `{name}` not set!')
+        else:
+            value = str(default_value)
+    if value.lower() not in true_ + false_:
+        raise ValueError(f'Invalid value `{value}` for variable `{name}`')
+    return value in true_
+
+def load_env_config():
+    '''Load environment variables from .env file'''
+    import os
+    from dotenv import load_dotenv
+    load_dotenv()
+    
+    config_dict = {}
+    config_dict["server_url"] = get_variable("JELLYFIN_SERVER_URL")
+    config_dict["api_key"] = get_variable("JELLYFIN_API_KEY")
+    config_dict["user_id"] = get_variable("JELLYFIN_USER_ID")
+    config_dict["movies_dir"] = get_variable("JELLYFIN_MOVIES_PATH")
+    config_dict["disable_tv_year_filter"] = get_variable("DISABLE_TV_YEAR_CHECK", default_value=False)
+    
+    return config_dict

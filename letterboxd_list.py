@@ -3,19 +3,17 @@ import requests
 import html
 import json
 import html
-from dotenv import load_dotenv
 
-from utils import request_repeat_get, request_repeat_post, find_collection_with_name_or_create, get_all_collections
+from utils import load_env_config, request_repeat_get, request_repeat_post, find_collection_with_name_or_create, get_all_collections
 
-load_dotenv()
+config = load_env_config()
+server_url = config["server_url"]
+api_key= config["api_key"]
+user_id = config["user_id"]
 
-# Load Config
-config = configparser.ConfigParser()
-config.read('config.ini')
-server_url = config["main"]["server_url"]
-user_id = config["main"]["user_id"]
 letterboxd_list_ids = json.loads(config["main"]["letterboxd_list_ids"])
-headers = {'X-Emby-Token': config["main"]["jellyfin_api_key"]}
+
+headers = {'X-Emby-Token': api_key}
 
 params = {
     "enableTotalRecordCount": "false",
