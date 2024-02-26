@@ -1,5 +1,4 @@
 requests
-configparser
 lxml
 python-dotenv
 pyyaml
