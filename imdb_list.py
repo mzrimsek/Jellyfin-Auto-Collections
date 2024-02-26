@@ -2,10 +2,12 @@
 import requests
 import html
 import json
-import configparser
 import csv
+from dotenv import load_dotenv
 
 from utils import request_repeat_get, request_repeat_post, find_collection_with_name_or_create, get_all_collections
+
+load_dotenv()
 
 # Load Config
 config = configparser.ConfigParser()
@@ -33,7 +35,7 @@ imdb_to_jellyfin_type_map = {
 }
 
 # Find list of all collections
-collections = get_all_collections(headers=headers)
+collections = get_all_collections(server_url, user_id, headers=headers)
 
 for imdb_list_id in imdb_list_ids:
     # Parse each IMDB list page
@@ -41,7 +43,7 @@ for imdb_list_id in imdb_list_ids:
     print()
     res = requests.get(f'https://www.imdb.com/list/{imdb_list_id}')
     list_name = html.unescape(res.text.split('<h1 class="header list-name">')[1].split("</h1>")[0])
-    collection_id = find_collection_with_name_or_create(list_name, collections, headers=headers)
+    collection_id = find_collection_with_name_or_create(server_url, list_name, collections, headers=headers)
     print("************************************************")
     print()
 

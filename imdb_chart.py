@@ -3,11 +3,13 @@ import requests
 import html
 import json
 import simplejson
-import configparser
 import re
 import datetime
+from dotenv import load_dotenv
 
 from utils import request_repeat_get, request_repeat_post, find_collection_with_name_or_create, get_all_collections
+
+load_dotenv()
 
 # Load Config
 config = configparser.ConfigParser()
@@ -24,7 +26,7 @@ params = {
 }
 
 # Find list of all collections
-collections = get_all_collections(headers=headers)
+collections = get_all_collections(server_url, user_id, headers=headers)
 
 for imdb_chart_id in imdb_chart_ids:
     # Parse each IMDB list page
@@ -33,7 +35,7 @@ for imdb_chart_id in imdb_chart_ids:
 
     res = requests.get(f'https://www.imdb.com/chart/{imdb_chart_id}')
     list_name = html.unescape(res.text.split('<h1 class="header">')[1].split("</h1>")[0])
-    collection_id = find_collection_with_name_or_create(list_name, collections, headers=headers)
+    collection_id = find_collection_with_name_or_create(server_url, list_name, collections, headers=headers)
     print("************************************************")
     print()
 
