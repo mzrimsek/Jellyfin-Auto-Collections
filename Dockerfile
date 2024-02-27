@@ -5,8 +5,16 @@ RUN pip install youtube-dl
 
 FROM base as build
 
-
+WORKDIR /app
 COPY . .
 RUN pip install -r requirements.txt
 
-CMD ["python"]
+FROM build as final
+
+WORKDIR /app
+COPY --from=build /app /app
+
+RUN mkdir /app/config
+VOLUME [ "/app/config" ]
+
+CMD ["python", "main.py"]
