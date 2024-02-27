@@ -1,9 +1,10 @@
-FROM ubuntu:20.04 as base
+FROM ubuntu:22.04 as base
 
-RUN apt-get update && apt-get install -y python3.10
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get update && apt-get install -y python3.10 wget
 
 RUN wget -O /tmp/script.py https://bootstrap.pypa.io/get-pip.py
-RUN python /tmp/script.py
+RUN python3.10 /tmp/script.py
 
 RUN pip install youtube-dl
 
@@ -21,4 +22,4 @@ COPY --from=build /app /app
 RUN mkdir /app/config
 VOLUME [ "/app/config" ]
 
-ENTRYPOINT [ "python", "main.py"]
+ENTRYPOINT [ "python3.10", "main.py"]
