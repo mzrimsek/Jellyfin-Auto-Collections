@@ -98,6 +98,7 @@ def load_env_config():
     config_dict["movies_dir"] = get_env_variable("JELLYFIN_MOVIES_DIR")
     
     config_dict["disable_tv_year_filter"] = get_env_variable("DISABLE_TV_YEAR_CHECK", default_value=False)
+    config_dict["scheduling_crontab"] = get_env_variable("SCHEDULING_CRONTAB")
     
     config_dict["do_kermode_intros"] = get_env_variable("DO_KERMODE_INTROS", default_value=False)
     config_dict["do_kermode_lists"] = get_env_variable("DO_KERMODE_LIST", default_value=False)
