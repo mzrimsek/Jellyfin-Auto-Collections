@@ -48,8 +48,18 @@ def execute_collection_scripts(app_config: dict = None):
         
 if __name__ == "__main__":
     app_config = load_app_config()
+    scheduling_enabled = app_config["scheduling_enabled"]
     scheduling_crontab = app_config["scheduling_crontab"]
+    scheduling_timezone = app_config["scheduling_timezone"]
+    run_scheduled_task_immediately = app_config["run_scheduled_task_immediately"]
     
-    scheduler = BlockingScheduler()
+    if scheduling_enabled:
+        if run_scheduled_task_immediately:
+            execute_collection_scripts(app_config)
     
-    scheduler.add_job(func=execute_collection_scripts, trigger=CronTrigger.from_crontab(scheduling_crontab), args=[app_config])
+        scheduler = BlockingScheduler()
+    
+        scheduler.add_job(func=execute_collection_scripts, trigger=CronTrigger.from_crontab(scheduling_crontab), timezone=scheduling_timezone, args=[app_config])
+    else:
+        execute_collection_scripts(app_config)
+        exit()
