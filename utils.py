@@ -109,7 +109,7 @@ def load_env_config():
     
     running_in_docker = get_env_variable("RUNNING_IN_DOCKER", default_value=False)
     config_dict["running_in_docker"] = running_in_docker
-    config_dict["docker_config_dir"] = get_env_variable("DOCKER_CONFIG_DIR") if running_in_docker else ""
+    config_dict["docker_config_dir"] = "/app/config/" if running_in_docker else ""
     
     return config_dict
 
@@ -124,8 +124,7 @@ def load_yaml_config(env_config: dict):
     '''Load config from config.yaml'''
     import yaml
     
-    running_in_docker = env_config["running_in_docker"]
-    config_dir = env_config["docker_config_dir"] if running_in_docker else ""
+    config_dir = env_config["docker_config_dir"]
     config_path = f"{config_dir}config.yaml"
     
     with open(config_path, "r") as f:
