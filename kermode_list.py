@@ -2,9 +2,8 @@ import requests
 
 from utils import load_app_config, find_collection_with_name_or_create, get_all_collections
 
-def update_mark_kermode_reviews_collection():
+def update_mark_kermode_reviews_collection(app_config: dict):
 '''Adds videos with have a BFI 'Mark Kermode Reviews' video to a collection'''
-    app_config = load_app_config()
     server_url = app_config["server_url"]
     api_key= app_config["api_key"]
     user_id = app_config["user_id"]
