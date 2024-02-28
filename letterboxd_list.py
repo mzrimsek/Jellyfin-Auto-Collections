@@ -26,13 +26,19 @@ def update_letterboxd_list_collections(app_config: dict):
         # Parse letterboxd page
         print()
         print()
-        res = requests.get(f'https://letterboxd.com/{list_id}/detail/by/release-earliest')
+        
+        request_base = f'https://letterboxd.com/{list_id}/detail/by/release-earliest'
+        res = requests.get(request_base)
+        
         list_name = html.unescape(res.text.split('<h1 class="title-1 prettify">')[1].split("</h1>")[0]).strip()
         collection_id = find_collection_with_name_or_create(server_url, list_name, collections, headers=headers)
+        
+        movies = res.text.split('film-detail-content">')[1:]
+        
         print("************************************************")
         print()
 
-        for movie in res.text.split('film-detail-content">')[1:]:
+        for movie in movies:
             movie_title = html.unescape(movie.split('<a href="')[1].split('>')[1].split("<")[0])
             movie_year = movie.split('metadata">')[1].split('<a href="')[1].split('>')[1].split("<")[0]
             params2 = params.copy()
