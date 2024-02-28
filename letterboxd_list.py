@@ -5,6 +5,26 @@ import html
 
 from utils import load_app_config, request_repeat_get, request_repeat_post, find_collection_with_name_or_create, get_all_collections
 
+def get_collection_data_from_letterboxd_list(list_id: str):
+    '''Get all movies from a Letterboxd list'''
+    page_number = 1
+    movies = []
+    list_name = None
+    
+    while True:
+        request_base = f'https://letterboxd.com/{list_id}/detail/by/release-earliest/page/{page_number}/'
+        res = requests.get(request_base)
+        
+        if list_name is None:
+            list_name = html.unescape(res.text.split('<h1 class="title-1 prettify">')[1].split("</h1>")[0]).strip()
+        page_movies = res.text.split('film-detail-content">')[1:]
+        
+        if len(page_movies) == 0:
+            return {"list_name": list_name, "movies": movies}
+        
+        movies += page_movies
+        page_number += 1
+
 def update_letterboxd_list_collections(app_config: dict):
     '''Make collections from Letterboxd lists'''
     server_url = app_config["server_url"]
@@ -27,13 +47,11 @@ def update_letterboxd_list_collections(app_config: dict):
         print()
         print()
         
-        request_base = f'https://letterboxd.com/{list_id}/detail/by/release-earliest'
-        res = requests.get(request_base)
+        collection_data = get_collection_data_from_letterboxd_list(list_id)
+        list_name = collection_data["list_name"]
+        movies = collection_data["movies"]
         
-        list_name = html.unescape(res.text.split('<h1 class="title-1 prettify">')[1].split("</h1>")[0]).strip()
         collection_id = find_collection_with_name_or_create(server_url, list_name, collections, headers=headers)
-        
-        movies = res.text.split('film-detail-content">')[1:]
         
         print("************************************************")
         print()
